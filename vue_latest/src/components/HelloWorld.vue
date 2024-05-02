@@ -1,6 +1,13 @@
+
+
+
+
 <script setup>
 import { ref } from 'vue';
 import ComponentSample from './sample/ComponentSample.vue';
+import BaseCompoForFallthroughDirectives from './sample/FallthroughDirectives.vue';
+import ClassStyleBinding from './sample/ClassStyleBinding.vue';
+import FormHandling from './sample/FormHandling.vue';
 
 const count = ref(0) //Takes an inner value and returns a reactive and mutable ref object
 console.log(count.value)
@@ -10,7 +17,6 @@ const name = ref('Vue.js')
 
 function greet(event) {
   alert(`Hello ${name.value}!`)
-  // `event` is the native DOM event
   if (event) {
     alert(event.target.tagName)
   }
@@ -43,34 +49,64 @@ defineProps({
      
     </h3>
 
- <!-- Two way Data Binding -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <br/>
+ <!-- Two way Data Binding  and inline Event Hnadling-->
     <button @click="count++">Add 1</button>
       <p>Count is: {{ count }}</p>
 
 
 
 
-<button @click="greet">Greet</button>
+  <button @click="greet">Greet</button>
   </div>
-
-
+  <br/>
+  <!-- Method EventHandling -->
   <button @click="warn('Form cannot be submitted yet.', $event)">
   Submit
 </button>
+<br/>
 <button @click="warn('Hello', $event)"> Hello</button>
 
 <!-- using inline arrow function -->
+<br/>
 <button @click="(event) => warn('Form cannot be submitted yet.', event)">
   Submit
 </button>
+<br/>
+<!-- Event Modifier -->
 <a @click.once="greet"> hello modifiers</a>
 
 <input @keyup.alt.enter="greet" />
 
 
+
 <!-- component usage -->
+<br/>
 
 <component :is="ComponentSample" />  
+<br/>
+
+<!-- the attributes in child will be overriden in parrent component -->
+<BaseCompoForFallthroughDirectives class="large" style="color: red;" />
+<br/>
+<ClassStyleBinding />
+<br/>
+<FormHandling />
 
 </template>
 
