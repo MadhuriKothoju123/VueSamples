@@ -1,0 +1,53 @@
+{
+  "users": [
+    {
+      "id": "3035",
+      "username": "madhuri kothoju",
+      "email": "kothojumadhuri2000@cognine.com",
+      "country": "India",
+      "password": "Madhuri123"
+    },
+    {
+      "id": "e615",
+      "username": "madhuri kothoju",
+      "email": "kothojumadhuri2000@cognine.com",
+      "country": "India",
+      "password": "Madhuri123"
+    },
+    {
+      "id": "5fce",
+      "username": "madfguri",
+      "email": "askjhdhksakjdhkSSHH",
+      "country": "USA",
+      "password": "AHDSGJSAGJDgjgdajasd"
+    },
+    {
+      "id": "6d27",
+      "username": "sanbdkjsahkdhaksdha",
+      "email": "sadghjklkjhgfd",
+      "country": "India",
+      "password": "dfyuikoliuytr"
+    },
+    {
+      "id": "53a1",
+      "username": "madhri",
+      "email": "nsamdnsMDnamdsmad",
+      "country": "India",
+      "password": "adsdddddd"
+    },
+    {
+      "id": "0019",
+      "username": "madhri",
+      "email": "nsamdnsMDnamdsmad",
+      "country": "India",
+      "password": "adsdddddd"
+    },
+    {
+      "id": "a1d0",
+      "username": "madhri",
+      "email": "nsamdnsMDnamdsmad",
+      "country": "India",
+      "password": "adsdddddd"
+    }
+  ]
+}
