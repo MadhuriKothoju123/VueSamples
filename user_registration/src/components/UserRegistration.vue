@@ -59,7 +59,7 @@
             country: this.country,
             password: this.password
           });
-         if(res.status===200){
+         if(res?.status===201){
           alert("Succesfully registered");
           this.$router.push('/about');
          }

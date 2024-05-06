@@ -43,7 +43,7 @@ export default {
 try {
 
 const response = await axios.get('http://localhost:8000/users');
-
+console.log(response);
 if(response.status=='200')this.users=response.data;
 } catch (error) {
 if (error.response.data.errors) {
@@ -53,7 +53,11 @@ this.errors = error.response.data.errors;
 },
 async deleteUser(user){
 const response=await axios.delete('http://localhost:8000/users/'+user.id);
-if(response.status=='200') this.users = this.users.filter(item => item.id !== response.data.id);
+console.log(response);
+if(response.status=='200'){
+  this.users = this.users.filter(item => item.id !== response.data.id);
+  alert('User Deleted Successfully');
+}
 else alert('User not Deleted')
    
     },
