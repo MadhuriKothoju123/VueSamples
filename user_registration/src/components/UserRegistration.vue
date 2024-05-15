@@ -53,7 +53,7 @@
     methods: {
       async submitForm() {  
              try {   
-        const res= await axios.post('http://localhost:8000/users', {
+        const res= await axios.post('http://localhost:3000/users', {
             username: this.username,
             email: this.email,
             country: this.country,

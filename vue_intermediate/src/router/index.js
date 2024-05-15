@@ -1,0 +1,73 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import RegistrationView from '../views/RegistrationView.vue'
+import LoginView from '../views/LoginView.vue';
+import TodoFormView from '../views/TodoFormView.vue';
+import TodoListView from '../views/TodoListView.vue'
+
+
+import store from '@/store'
+
+
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView
+    },
+
+    {
+      path: '/registration',
+      name: 'Registration',
+      component: RegistrationView
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
+    {
+      path: '/todoForm',
+      name: 'todoform',
+      component: TodoFormView,
+      // meta: { requiresAuth: true}
+    },
+
+    {
+      path: '/todoList',
+      name: 'todolist',
+      component: TodoListView,
+      // component: () => import('../views/TodoListView.vue'),
+      // meta: { requiresAuth: true}
+    },
+    {
+      path: '/about',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue')
+    },
+    // {
+    //   path: '/user/:id',
+    //   component: UserDetails,
+    //   props: true // Pass route params as props to the component
+    // }
+  ]
+
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
+    // If route requires authentication and user is not logged in, redirect to login page
+    next('/login');
+  } else {
+    // Proceed to the next route
+    next();
+  }
+});
+
+export default router

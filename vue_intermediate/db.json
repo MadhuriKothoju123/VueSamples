@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "madhuri kothoju",
+      "email": "madhuri.kothoju@cognine.com",
+      "country": "Colorado",
+      "password": "1234",
+      "mobileNumber": "8639841359",
+      "confirmPassword": "1234"
+    }
+  ],
+  "todos": [
+    {
+      "id": 1,
+      "todoItem": "mavc",
+      "date": "2024-05-24",
+      "status": "in_progress",
+      "note": "sdfghjklkjhgfdsaSDFGHJK",
+      "user": "madhuri.kothoju@cognine.com"
+    }
+  ]
+}
