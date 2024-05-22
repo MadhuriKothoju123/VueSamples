@@ -7,11 +7,6 @@ const state = {
   };
   
   const mutations = {
-    // setTodos(state, todo) {
-    //     state.todoList.add(todo);
-    //    console.log(state);
-       
-    // },
 
     setTodos(state, todos) {
       state.todos = todos
@@ -23,7 +18,7 @@ const state = {
       state.todos.push(todo)
     },
     deleteTodo(state, todoId) {
-      state.todos = state.todos.filter(post => post.id !== todoId)
+      state.todos = state.todos.filter(todo => todo.id !== todoId)
     },
     updateTodo(state, updatedTodo) {
       state.todos = state.todos.map(todo => {
@@ -38,39 +33,17 @@ const state = {
   
   const actions = {
  
-    //  async addTodo({ commit }, todoData) {
-    //   let todoId=1;
-    //   await axios.post('http://localhost:3000/todos', {
-    //         id:todoId,
-    //         todoItem: todoData.todoItem,
-    //         date: todoData.date,
-    //         status: todoData.status,
-    //         note: todoData.note,
-    //         userEmail: todoData.user
-    //       });
-    //       todoId++;
-    //   console.log(todoData);
-
-    
-
-
-    //   // Logic to authenticate user and commit mutation
-    //   commit('setTodos', todoData);
-    // },
-
-
-
     async fetchTodos({ commit }) {
       try {
         const response = await axios.get('http://localhost:3000/todos');
-        if(response.status===201){
+        if(response.status===200){
         commit('setTodos', response.data)
-        return true
+       
         }
       } catch (error) {
-        console.error('Error fetching posts:', error)
+        console.error('Error fetching todos:', error)
       }
-      return false;
+      
     },
     async createTodo({ commit }, todo) {
       try {
@@ -81,25 +54,38 @@ const state = {
         return true
         }
       } catch (error) {
-        console.error('Error creating post:', error)
+        console.error('Error creating todo:', error)
       }
       return false;
     },
-    async deletePost({ commit }, user) {
+    async deleteTodo({ commit }, todo) {
       try {
-        await axios.delete(`http://localhost:3000/todos/${user}`)
-        commit('deleteTodo', user)
+       const response= await axios.delete(`http://localhost:3000/todos/${todo.id}`)
+if(response.status===200) {
+  commit('deleteTodo', todo.id);
+  return true
+
+}
       } catch (error) {
-        console.error('Error deleting post:', error)
+        console.error('Error deleting todo:', error);
+        
       }
+      return false;
     },
-    async updatePost({ commit }, updatedTodo) {
+    async updateTodo({ commit }, updatedTodo) {
+      console.log(updatedTodo);
       try {
-        const response = await axios.put(`http://localhost:3000/todos/${updatedTodo.user}`, updatedTodo)
+        const response = await axios.put(`http://localhost:3000/todos/${updatedTodo.id}`, updatedTodo);
+        
+        if(response.status===200) {
         commit('updateTodo', response.data)
+    return true;
+        }
       } catch (error) {
-        console.error('Error updating post:', error)
+        console.error('Error updating todo:', error);
+       
       }
+      return false;
     }
   }
 
@@ -107,16 +93,29 @@ const state = {
 
   
   const getters = {
-    //getTodos: state => state.todoList;
+
 
     getTodoById: state => id => {
       return state.todos.find(todo => todo.id === id)
     },
-    // Getter to get posts by a specific author
+
     getUserTodos: state => user => {
       return state.todos.filter(todo => todo.user === user)
     },
-   getTodoId:state=> state.todoId
+      getTodoId:state=> state.todoId,
+
+  
+
+getTodoDataById: state=>todoId=> state.todos.filter(todo=> 
+  {
+   if( todo.id==todoId)
+    {
+      return todo;
+    }
+   
+  }
+)
+
   };
   
   export default {

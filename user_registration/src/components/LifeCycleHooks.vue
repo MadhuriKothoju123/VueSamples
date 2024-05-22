@@ -4,6 +4,7 @@
     <img ref="img" src="https://picsum.photos/200" 
     alt="image" width="200" />
     <span style="margin-top: 10px;">comment/uncomment me to see beforeUpdate/updated hook's reactivity</span>
+    {{ test }}
 </div>
   </template>
   
@@ -22,7 +23,7 @@
     },
     computed: {
       test: function () {
-        return "I'm computed hook";
+        return `I'm computed hook ${ this.stateOfBob }}`;
       },
     },
     beforeCreate() {
@@ -39,7 +40,10 @@
       this.stateOfBob = "awakened but still sleeping";
       console.log("Bob is currently ", this.stateOfBob);
       console.log("computed hook is returning ", this.test);
-      console.log("ref created in beforeCreate", this.exampleData);  // we can make api call
+      console.log("ref created in beforeCreate", this.exampleData); 
+      console.log("The Dom node is ", this.$refs["greeting"]);
+      
+      // we can make api call
     },
     beforeMount() {
       console.log("I'm beforeMount hook");

@@ -1,23 +1,80 @@
 {
   "users": [
     {
-      "id": 1,
-      "username": "madhuri kothoju",
-      "email": "madhuri.kothoju@cognine.com",
+      "id": "1",
+      "username": "Madhuri Kothoju",
+      "email": "kothojumadhuri2000@cognine.com",
       "country": "Colorado",
       "password": "1234",
-      "mobileNumber": "8639841359",
+      "mobileNumber": "08639841359",
+      "confirmPassword": "1234"
+    },
+    {
+      "id": "2",
+      "username": "SrijaEnjapuri",
+      "email": "srijaenjapuri2000@cognine.com",
+      "country": "Colorado",
+      "password": "1234",
+      "mobileNumber": "08639841359",
       "confirmPassword": "1234"
     }
   ],
   "todos": [
     {
-      "id": 1,
-      "todoItem": "mavc",
-      "date": "2024-05-24",
-      "status": "in_progress",
-      "note": "sdfghjklkjhgfdsaSDFGHJK",
+      "id": "4",
+      "todoItem": "Mvc application",
+      "date": "2024-05-25",
+      "status": "pending",
+      "note": "qwerfghjkjhgfdszZxcvbn",
       "user": "madhuri.kothoju@cognine.com"
+    },
+    {
+      "id": "15",
+      "todoItem": "Mvc application",
+      "date": "15-6-2024",
+      "status": "Pending",
+      "note": "sdfghjkl;'lkjhgfdsdfghjkl;'",
+      "user": "kothojumadhuri2000@cognine.com"
+    },
+    {
+      "id": "17",
+      "todoItem": "svbnm,./bvnm,",
+      "date": "2024-05-18",
+      "status": "in_progress",
+      "note": "cvbnm,./;lkjhgfdghjkl;'",
+      "user": "kothojumadhuri2000@cognine.com"
+    },
+    {
+      "id": "19",
+      "todoItem": "xdfghjkl;'lkjhgf",
+      "date": "2024-05-17",
+      "status": "completed",
+      "note": "sdfuioikjhgf",
+      "user": "kothojumadhuri2000@cognine.com"
+    },
+    {
+      "id": "20",
+      "todoItem": "dfghjklkjhgfds",
+      "date": "2024-05-25",
+      "status": "completed",
+      "note": "fghjkl;'lkjhgfd",
+      "user": "kothojumadhuri2000@cognine.com"
+    },
+    {
+      "id": "21",
+      "todoItem": "dfghjkl;kjhgf",
+      "date": "2024-05-25",
+      "status": "in_progress",
+      "note": "dsfghjkl;lkjhgfcx",
+      "user": "kothojumadhuri2000@cognine.com"
+    },
+    {
+      "id": "22",
+      "todoItem": "mvc",
+      "date": "22-5-2024",
+      "status": "In progress",
+      "note": "sadfghjkhgfdsasdfghjk",
+      "user": "kothojumadhuri2000@cognine.com"
     }
   ]
 }

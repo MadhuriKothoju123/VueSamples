@@ -1,34 +1,84 @@
 <script setup>
 import store from '@/store';
-import { ref } from 'vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { RouterLink, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { VContainer } from 'vuetify/lib/components/index.mjs';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+
+
+
+
+const router= useRouter();
 
 const user= computed(()=>store.getters.getCurrentUser)
 const todos= computed(()=> store.getters.getUserTodos(user.value));
-const openModal=ref(false);
-const todoItem = ref('');
-      const date = ref(null);
-      const status = ref('');
-      const note = ref('');
-console.log(todos);
-const OpenModalContent=(todo)=>{
-  console.log(todo);
-  todoItem.value=todo.todoItem;
-  date.value=todo.date;
-  status.value=todo.status;
-  note.value=todo.note;
-  openModal.value=true;
-}
+onBeforeRouteUpdate((to,from,next)=>{
+  if(to.params.id) {
+    if(to.name==="editTodo"){
+      if (confirm('Do you really want to make changes to Todo?')) {
+    next();
+  } else {
+    next(false);
+  }
+    }
+  //   else if(to.name==='deleteTodo'){
+  //     if (confirm('Do you really want to make changes to Todo?')) {
+  //   next();
+  // }
+  //  else {
+  //   next(false);
+  // }
+  //   }
+  else{
+    next();
+  }
+
+  }
+  else{
+  next();
+  }
  
+
+})
+
+
+onMounted(()=>{
+    store.dispatch('fetchTodos')
+})
+
+
+const OpenModalContent=(id)=>{
+router.push({name: 'editTodo', params: {id: id }})
+}
+
+
+
+const deleteTodo=async(todo)=>{
+   
+const isDeleted= await store.dispatch('deleteTodo', todo);
+
+
+if(isDeleted) alert('Todo Deleted Successfully');
+
+}
+
+
+
+ const navigateToTodoDetails=(id)=>{
+
+  //  router.push({ path: `todoList/todo/${{ id }}` })
+  router.push({name:'todoDetails',params:{id:id}})
+ }
 </script>
 
 <template>
+
   <VContainer  style="display: flex; margin-top: 60px; justify-content: center;">
-  <v-card elevation="10"  width="1000px">
-    <v-table  hover=true height="500px"
+
+  <v-card elevation="10"  width="1000px" style="padding: 20px;"> 
+    <div style="display: flex; justify-content: flex-end;">
+      <RouterLink to="/todoform"><VBtn color="green">Add Todo </VBtn></RouterLink>
+  </div>
+    <v-table style="margin: 20px;"  hover=true height="500px"
       fixed-header
     >
       <thead>
@@ -54,48 +104,66 @@ const OpenModalContent=(todo)=>{
           <th class="text-left">
           Delete
           </th>
+          <th class="text-left">
+        View
+          </th>
         </tr>
       </thead>
+  
       <tbody>
-        <tr
+        
+        <TransitionGroup name="fade" >
+        
+        <tr 
           v-for="(todo, index) in todos"
-          :key="index"
+          :key="index" v-memo="[todo.id]"
         >
           <td>{{ todo.id }}</td>
           <td>{{ todo.todoItem }}</td>
           <td>{{ todo.date }}</td>
           <td>{{ todo.status }}</td>
           <td>{{ todo.note }}</td>
-          <td><VBtn @click="OpenModalContent(todo)" color="blue" >Edit</VBtn></td>
-          <td><VBtn color="red" >Delete</VBtn></td>
+          <td><VBtn @click="OpenModalContent(todo.id)" color="orange" >Edit</VBtn></td>
+          <td><VBtn color="red"  @click="deleteTodo(todo)">Delete</VBtn></td>
+          <td><VBtn color="blue" @click="navigateToTodoDetails(todo.id)"  >View</VBtn></td>
+          <td v-if="console.log('Rendering todo:', todo.id)"></td>
+          <!-- <td><RouterLink to="{
+                                        name: 'todoDetails',
+                                        params: { id: post.id },
+                                        query: { sort: 'asc' },
+                                    }"><VBtn color="blue"   >View</VBtn></RouterLink></td> -->
 
         </tr>
+
+      </TransitionGroup>
       </tbody>
+
     </v-table>
  
   </v-card>
 
-  <v-dialog v-model="openModal" max-width="500px">
-    <!-- <template v-slot:activator="{ on }">
-      <v-btn color="primary" dark v-on="on">Open Modal</v-btn>
-    </template> -->
-    <v-card>
-      <v-card-title>
-        Todo Details
-      </v-card-title>
-      <v-card-text>
-        <v-text-field v-model="todoItem" label="Todo Item"></v-text-field>
-        <VueDatePicker v-model="date"></VueDatePicker>
-        <v-select v-model="status" :items="statusOptions" label="Status"></v-select>
-        <v-textarea v-model="note" label="Note"></v-textarea>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-  
 </VContainer>
+
+<RouterView/>
   </template>
+  <style>
+
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.fade-leave-active {
+  position: absolute;
+}
+</style>

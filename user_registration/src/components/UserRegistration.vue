@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="submitForm">
+    <form  @submit.prevent="submitForm">
       <div class="container">
         <hr/>
       <label for="username"><b>User Name</b></label>
@@ -29,11 +29,11 @@
     </form>
 
     <!--the Lazy update using 'lazy modifier' It will reduce number of DOM Updates -->
-    <!-- <div>
+    <div>
     <input type="text" v-model="username" placeholder="Enter username">
     <input type="password" v-model.lazy="password" placeholder="Enter password"> 
     <button @click="login">Login</button>
-  </div> -->
+  </div>
   </template>
   
   <script>
@@ -70,7 +70,6 @@
         }
       },
       login() {
-      // Process login using this.username and this.password
       console.log('Username:', this.username);
       console.log('Password:', this.password);
     }

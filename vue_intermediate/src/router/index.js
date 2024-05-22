@@ -7,7 +7,13 @@ import TodoListView from '../views/TodoListView.vue'
 
 
 import store from '@/store'
-
+// import TodoDetailsView from '../views/TodoDetailsView.vue';
+import TodoDetailsView from '@/views/TodoDetailsView.vue';
+import EditTodoView from '@/views/EditTodoView.vue';
+// import { defineAsyncComponent } from 'vue';
+// const TodoListView = defineAsyncComponent(() =>
+//   import('../views/TodoListView.vue')
+// )
 
 
 const router = createRouter({
@@ -35,11 +41,49 @@ const router = createRouter({
       component: TodoFormView,
       // meta: { requiresAuth: true}
     },
-
     {
-      path: '/todoList',
+      path: '/todo/:id',
+      name: 'todoDetails',
+      component: () => import('../views/TodoDetailsView.vue'),
+      props: true
+    },
+    {
+      path: '/builtInComponents',
+      name: 'todoDetails',
+      component: () => import('../views/TodoDetailsView.vue'),
+      props: true
+    },
+    // {
+    //   path: '/builtIn',
+    //   name: 'todoDetails',
+    //   component: () => import('../views/TodoDetailsView.vue'),
+    //   props: true
+    // },
+    {
+      path: '/todoList/',
       name: 'todolist',
       component: TodoListView,
+      children:[
+        {
+          path: 'todoDetails/:id',
+          name: 'todoDetails',
+          component:TodoDetailsView,
+          props: true
+        },
+        {
+          path: 'editTodo/:id',
+          name: 'editTodo',
+          component:EditTodoView,
+          props: true
+        },
+
+        // {
+        //   path: 'deleteTodo/:id',
+        //   name: 'deleteTodo',
+        //   component:DeleteTodoView,
+        //   props: true
+        // }
+      ]
       // component: () => import('../views/TodoListView.vue'),
       // meta: { requiresAuth: true}
     },

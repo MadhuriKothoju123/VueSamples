@@ -14,7 +14,7 @@
                      <div class="text-subtitle-1 text-medium-emphasis">Email</div>
 
                       <v-text-field
-                         v-model="email"
+                         v-model="user.email"
                          name="email"
                          placeholder="Enter email address"
                          type="text"
@@ -22,6 +22,8 @@
                          density="compact"
                          prepend-inner-icon="mdi-email-outline"
                          required
+                         :error-messages="v$.email.$invalid? emailValidation(v$.email.$invalid, user?.email ): ''"
+                   
                       ></v-text-field>
                    
 
@@ -30,12 +32,13 @@
                      <div class="text-subtitle-1 text-medium-emphasis">Password</div>
 
                        <v-text-field
-                         v-model="password"
+                         v-model="user.password"
                          type="password"
                          name="password"
                          density="compact"
                          variant="outlined"
                          placeholder="Enter Password"
+                         :error-messages="v$.password.$invalid? passwordValidation(v$.password.$invalid, user?.password ): ''"
                        
                          required
                       ></v-text-field>
@@ -52,30 +55,45 @@
   </template>
 <script setup>
 import router from '@/router';
-import { ref } from 'vue';
+import useVuelidate from '@vuelidate/core';
+import axios from 'axios';
+import { computed } from 'vue';
+import { reactive } from 'vue';
 import { useStore } from 'vuex';
+import { required, email, minLength } from '@vuelidate/validators';
+import { emailValidation, passwordValidation } from '@/validation/registrationFormValidations';
 const store= useStore();
-const loading = ref(false);
-const email = ref('');
-const password = ref('');
-const error = ref(null);
+const user=reactive({
+  email:'' ,
+password:''
+})
 
 
+
+const rules = computed(()=>({
+    email: { required, email },
+    password: { required, minLength: minLength(8) },
+}));
+  
+ 
+  
+
+const v$ = useVuelidate(rules, user)
 
 const login=async()=>{
-   loading.value = true;
+
   try {
-    // Simulating user authentication with a delay
-   console.log(email.value);
-    await store.dispatch('loginUser', email.value
-);
-  
+   console.log(email);
+   const res= await axios.get(`http://localhost:3000/users?email=${email.value}`);
+   if(res.status===200) {
+    await store.dispatch('loginUser', email.value);
+    alert('Successfully User Logined');
     router.push('/todoForm');
+   }
+  
   } catch (err) {
-    error.value = 'Invalid username or password';
-  } finally {
-    loading.value = false;
-  }
+  console.log('Invalid username or password');
+  } 
 }
 
 

@@ -9,7 +9,7 @@
                   <v-card  class="mx-auto  pa-12 pb-8 "  style="margin-top: 170px; width: 800px !important; " elevation="8" >
                   <h2 style="margin-top: 14px; margin-bottom: 45px; display: flex; justify-content: center;">CREATE ACCOUNT</h2>
                     
-                     <form ref="form" @submit.prevent="submitForm()">
+                     <form  @submit.prevent="submitForm()">
                       <v-row style="margin-bottom: -40px;">
                         <v-col>
                           <div class="text-subtitle-1 text-medium-emphasis">User Name</div>
@@ -18,10 +18,13 @@
                               v-model="userData.username"
                               prepend-inner-icon="mdi-account"
                               name="username"
+                              placeholder="Enter username"
                               type="text"
                               variant="outlined"
                               density="compact"
-                            
+                             :error-messages="v$.username.$invalid? usernameValidation(v$.username.$invalid, userData.username ): ''"
+                           
+
                               required
                            ></v-text-field>
                           </v-col>
@@ -33,10 +36,12 @@
                               name="email"
                               placeholder="Enter email address"
                               type="text"
+                            
                               variant="outlined"
                               density="compact"
                               prepend-inner-icon="mdi-email-outline"
-                              required
+                             :error-messages="v$.email.$invalid? emailValidation(v$.email.$invalid, userData.email ): ''"
+
                            ></v-text-field>
                           </v-col>
                           </v-row>
@@ -51,7 +56,8 @@
                               variant="outlined"
                               density="compact"
                               prepend-inner-icon="mdi-phone"
-                           
+                              :error-messages="v$.mobileNumber.$invalid? moblieNumberValidation(v$.mobileNumber.$invalid, userData.mobileNumber ): ''"
+                          
                            ></v-text-field>
                           </v-col>
                           <v-col>
@@ -59,6 +65,7 @@
 
                             <v-select 
                             v-model="userData.country"
+                            
                             placeholder="select the country"
                            :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
                            variant="outlined"
@@ -80,6 +87,8 @@
                               placeholder="Enter Password"
                             
                               required
+                             :error-messages="v$.password.$invalid? passwordValidation(v$.password.$invalid, userData.password ): ''"
+
                            ></v-text-field>
                           </v-col>
                           <v-col>
@@ -95,6 +104,7 @@
                               placeholder="Enter Confirm Password"
 
                            ></v-text-field>
+                  
                           </v-col>
                           </v-row>
                           <v-row style="display: flex;margin-top: 46px;">
@@ -114,10 +124,14 @@
 
 </template>
 <script setup>
-import {reactive, ref  } from 'vue';
  import axios from 'axios';
 import router from '@/router';
 import store from '@/store';
+import useVuelidate from '@vuelidate/core';
+import { required, email, minLength, sameAs } from '@vuelidate/validators';
+import { computed } from 'vue';
+import { reactive } from 'vue';
+import { emailValidation, moblieNumberValidation, passwordValidation, usernameValidation } from '@/validation/registrationFormValidations';
 const userData= reactive({
    username: '',
    email :'',
@@ -128,8 +142,22 @@ const userData= reactive({
 
 });
 
+const rules = computed(()=>({
+    username: { required,  minLength: minLength(3) },
+    email: { required, email },
+    mobileNumber: { required, minLength: minLength(10) },
+    country: { required },
+    password: { required, minLength: minLength(8) },
+    confirmPassword: { required, sameAsPassword: sameAs(userData?.password) }
+}));
+  
+ 
+  
 
-const form = ref(null);
+const v$ = useVuelidate(rules, userData)
+
+
+// const formData = ref(null);
 
 const submitForm =async()=>{  
 store.commit('incrementUserId');
@@ -137,12 +165,12 @@ store.commit('incrementUserId');
           
         const res= await axios.post('http://localhost:3000/users', {
             id: store.getters.getUserId,
-            username: userData.username,
-            email: userData.email,
-            country: userData.country,
-            password: userData.password,
-            mobileNumber: userData.mobileNumber,
-            confirmPassword:userData.confirmPassword
+            username: userData.value.username,
+            email: userData.value.email,
+            country: userData.value.country,
+            password: userData. value.password,
+            mobileNumber: userData.value.mobileNumber,
+            confirmPassword:userData.value.confirmPassword
           });
          if(res?.status===201){
           alert("Succesfully registered");
@@ -157,18 +185,10 @@ store.commit('incrementUserId');
       }
 
 const resetData=()=>{
-  form.value.reset();
+  v$.value.$reset();
+  Object.keys(userData).forEach(key => {
+    userData[key] = '';
+  });
 }
-
-// onMounted(async () => {
-//   try {
-//     const response = await axios.get('your_api_endpoint');
-//     items.value = response.data;
-//     loading.value = false;
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//     loading.value = false;
-//   }
-// });
 
 </script>

@@ -42,7 +42,7 @@ export default {
     async fetchItems() {
 try {
 
-const response = await axios.get('http://localhost:8000/users');
+const response = await axios.get('http://localhost:3000/users');
 console.log(response);
 if(response.status=='200')this.users=response.data;
 } catch (error) {
@@ -52,7 +52,7 @@ this.errors = error.response.data.errors;
 }
 },
 async deleteUser(user){
-const response=await axios.delete('http://localhost:8000/users/'+user.id);
+const response=await axios.delete('http://localhost:3000/users/'+user.id);
 console.log(response);
 if(response.status=='200'){
   this.users = this.users.filter(item => item.id !== response.data.id);

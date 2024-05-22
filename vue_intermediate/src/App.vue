@@ -6,9 +6,12 @@ import HeaderToolbarRouter from './components/HeaderToolbarRouter.vue';
 </script>
 
 <template>
-  
+  <Suspense>
+    <div>
   <HeaderToolbarRouter  />
   <RouterView />
+</div>
+</Suspense>
 </template>
 
 

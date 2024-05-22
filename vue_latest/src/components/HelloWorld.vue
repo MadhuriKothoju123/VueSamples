@@ -3,7 +3,7 @@
 
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import ComponentSample from './sample/ComponentSample.vue';
 import BaseCompoForFallthroughDirectives from './sample/FallthroughDirectives.vue';
 import ClassStyleBinding from './sample/ClassStyleBinding.vue';
@@ -21,6 +21,10 @@ function greet(event) {
     alert(event.target.tagName)
   }
 }
+computed(()=>{
+  return  count
+})
+ 
 
 function warn(msg, e){
   if(e){

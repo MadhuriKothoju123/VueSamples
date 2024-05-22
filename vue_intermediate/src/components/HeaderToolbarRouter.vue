@@ -91,16 +91,18 @@ const items = ref([
         v-if="isLoggedIn"
       >
         <template v-slot:activator="{ props }">
+          <Transition name="fade">
           <v-btn icon v-bind="props" color="secondary">
             <v-icon size="large">mdi-account-circle</v-icon>
           </v-btn>
+        </Transition>
         </template>
         <v-card min-width="300">
           <v-list>
             <v-list-item
-              prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
-              subtitle="Founder of Vuetify"
-              title="John Leider"
+           
+             :title="'welcome'"
+           :subtitle="email"
             >
               <template v-slot:append>
                 <v-btn
@@ -152,3 +154,11 @@ const items = ref([
     </v-dialog>
   </div>
 </template>
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.s ease-in-out;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>

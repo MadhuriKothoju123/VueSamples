@@ -13,6 +13,7 @@ import router from './router'
 import "bootstrap/dist/css/bootstrap.min.css";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import CustomPlugin from './plugins/CustomPlugin'
 const vuetify = createVuetify({
 icons:
 {
@@ -23,5 +24,6 @@ icons:
 const app = createApp(App)
 app.component('VueDatePicker', VueDatePicker);
 app.use(router)
+app.use(CustomPlugin);
 app.use(store)  
 app.use(vuetify).mount('#app')
