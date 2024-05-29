@@ -39,9 +39,9 @@ const items = ref([
     <div class="demo">
     <label><input type="radio" v-model="current" :value="keepAliveCompo1" /> A</label>
     <label><input type="radio" v-model="current" :value="keepAliveCompo2" /> B</label>
-    <KeepAlive>
+  
       <component :is="current"></component>
-    </KeepAlive>
+
   </div>
 
 
@@ -52,7 +52,7 @@ const items = ref([
     <div>
     <h1>Item List</h1>
     <ul>
-      <li v-for="item in memoizedItems" :key="item.id" v-memo="[item.id]">
+      <li v-for="item in memoizedItems" :key="item.id" >
         {{ item.name }}
         {{ console.log(item.id) }}
       </li>

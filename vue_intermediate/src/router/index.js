@@ -6,7 +6,7 @@ import TodoFormView from '../views/TodoFormView.vue';
 import TodoListView from '../views/TodoListView.vue'
 
 
-import store from '@/store'
+// import store from '@/store'
 // import TodoDetailsView from '../views/TodoDetailsView.vue';
 import TodoDetailsView from '@/views/TodoDetailsView.vue';
 import EditTodoView from '@/views/EditTodoView.vue';
@@ -53,12 +53,12 @@ const router = createRouter({
       component: () => import('../views/TodoDetailsView.vue'),
       props: true
     },
-    // {
-    //   path: '/builtIn',
-    //   name: 'todoDetails',
-    //   component: () => import('../views/TodoDetailsView.vue'),
-    //   props: true
-    // },
+    {
+      path: '/emialLinlLogin',
+      name: 'emailLinkLogin',
+      component: () => import('../views/EmailLinkAuth.vue'),
+      props: true
+    },
     {
       path: '/todoList/',
       name: 'todolist',
@@ -90,10 +90,13 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+
+    {
+      path: '/optionapi',
+      name: 'optionapi',
+      component: () => import('../views/OptionsApi.vue')
     },
     // {
     //   path: '/user/:id',
@@ -104,14 +107,14 @@ const router = createRouter({
 
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
-    // If route requires authentication and user is not logged in, redirect to login page
-    next('/login');
-  } else {
-    // Proceed to the next route
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
+//     // If route requires authentication and user is not logged in, redirect to login page
+//     next('/login');
+//   } else {
+//     // Proceed to the next route
+//     next();
+//   }
+// });
 
 export default router

@@ -6,12 +6,13 @@ import store from '@/store'
 import router from '@/router'
 import axios from 'axios'
 import { computed } from 'vue';
+import { useAuthStore } from '@/piniastore/auth'
 
 const dialog = ref(false)
 const openAlert= ref( false);
+const authStore= useAuthStore()
 
-
-const isLoggedIn = computed(() => store.getters.isLoggedIn);
+const isLoggedIn = computed(() => !!authStore.user);
 
 console.log(store.getters.isLoggedIn);
 
@@ -29,7 +30,8 @@ const closeMenu = () => {
 }
 
 const logout = () => {
-  store.dispatch('logoutUser', { currentUser: null })
+  // store.dispatch('logoutUser', { currentUser: null })
+  authStore.logout();
    isLoggedIn.value=false;
   router.push('/login')
 }

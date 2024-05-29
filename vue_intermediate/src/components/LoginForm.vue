@@ -46,6 +46,8 @@
                   
                  </form>
              <p style="margin-top: 20px; display: flex; justify-content: center;">Not a member <br/> <router-link to="/registration" > Sign up</router-link></p>
+             <p style="margin-top: 20px; display: flex; justify-content: center;">Not a member <br/> <router-link to="/emialLinlLogin" > Send Sign-In Link</router-link></p>
+
              </v-card>
            </v-sheet>
         
@@ -56,17 +58,18 @@
 <script setup>
 import router from '@/router';
 import useVuelidate from '@vuelidate/core';
-import axios from 'axios';
 import { computed } from 'vue';
 import { reactive } from 'vue';
-import { useStore } from 'vuex';
 import { required, email, minLength } from '@vuelidate/validators';
 import { emailValidation, passwordValidation } from '@/validation/registrationFormValidations';
-const store= useStore();
+import { useAuthStore } from '@/piniastore/auth';
+// const store= useStore();
 const user=reactive({
   email:'' ,
 password:''
-})
+});
+
+const authStore= useAuthStore();
 
 
 
@@ -84,12 +87,17 @@ const login=async()=>{
 
   try {
    console.log(email);
-   const res= await axios.get(`http://localhost:3000/users?email=${email.value}`);
-   if(res.status===200) {
-    await store.dispatch('loginUser', email.value);
+  const res= await authStore.login(user);
+  //  if(res.status===200) {
+  //   await store.dispatch('loginUser', email.value);
+  //   alert('Successfully User Logined');
+  //   router.push('/todoForm');
+  //  }
+
+  if(res){
     alert('Successfully User Logined');
     router.push('/todoForm');
-   }
+  }
   
   } catch (err) {
   console.log('Invalid username or password');

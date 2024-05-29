@@ -124,9 +124,9 @@
 
 </template>
 <script setup>
- import axios from 'axios';
 import router from '@/router';
-import store from '@/store';
+// import store from '@/store';
+import { useAuthStore } from '@/piniastore/auth';
 import useVuelidate from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
 import { computed } from 'vue';
@@ -155,33 +155,27 @@ const rules = computed(()=>({
   
 
 const v$ = useVuelidate(rules, userData)
-
+const authStore= useAuthStore();
 
 // const formData = ref(null);
 
 const submitForm =async()=>{  
-store.commit('incrementUserId');
+// store.commit('incrementUserId');
           try {   
-          
-        const res= await axios.post('http://localhost:3000/users', {
-            id: store.getters.getUserId,
-            username: userData.value.username,
-            email: userData.value.email,
-            country: userData.value.country,
-            password: userData. value.password,
-            mobileNumber: userData.value.mobileNumber,
-            confirmPassword:userData.value.confirmPassword
-          });
-         if(res?.status===201){
-          alert("Succesfully registered");
+       const res= await authStore.signup(userData);
+  
+    if(res){
+      alert('Signup successful');
+      router.push('/login')
+
+    }
+        //  if(res?.status===201){
+        //   alert("Succesfully registered");
        
-         router.push('/login')
-         }
+        //  }
         } catch (error) {
-          if (error.response.data.errors) {
-            this.errors = error.response.data.errors;
-          }
-        }
+    alert(error.message);
+  }
       }
 
 const resetData=()=>{

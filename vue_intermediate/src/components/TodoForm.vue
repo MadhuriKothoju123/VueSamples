@@ -35,8 +35,8 @@
   <script setup>
   import router from '@/router';
 import store from '@/store';
-import { onMounted, ref } from 'vue';
-
+import { ref } from 'vue';
+import { useAuthStore } from '@/piniastore/auth';
 
 
   
@@ -45,11 +45,10 @@ import { onMounted, ref } from 'vue';
       const status = ref('');
       const note = ref('');
 const todoForm=ref(null);
+const auth= useAuthStore();
+console.log(auth?.user?.email);
+console.log(auth?.user?.value);
 
-onMounted(()=>{
-     store.dispatch('fetchTodos');
-  
-})
       const submitForm = async () => {
       store.commit('incrementTodoId');
 console.log( store.getters.getTodoId);
@@ -59,7 +58,7 @@ console.log( store.getters.getTodoId);
           date: date.value,
           status: status.value,
           note: note.value,
-          user: store.getters.getCurrentUser
+           user: auth?.user?.email
         };
         console.log(formData);
         console.log(formData);

@@ -3,13 +3,17 @@ import store from '@/store';
 import { computed, onMounted } from 'vue';
 import { RouterLink, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { VContainer } from 'vuetify/lib/components/index.mjs';
-
+import { useAuthStore } from '@/piniastore/auth';
 
 
 
 const router= useRouter();
+const authStore= useAuthStore()
 
-const user= computed(()=>store.getters.getCurrentUser)
+
+
+console.log(authStore.user);
+const user= computed(()=>authStore?.user?.email)
 const todos= computed(()=> store.getters.getUserTodos(user.value));
 onBeforeRouteUpdate((to,from,next)=>{
   if(to.params.id) {
