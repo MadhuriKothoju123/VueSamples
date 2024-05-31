@@ -2,30 +2,54 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { auth, db } from '@/firebase';
-import { createUserWithEmailAndPassword, isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithEmailLink, signOut } from 'firebase/auth';
-import { ref as dbRef, set } from 'firebase/database';
+import { createUserWithEmailAndPassword, isSignInWithEmailLink, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithEmailLink, signOut } from 'firebase/auth';
+import { addDoc, collection, doc, getDocs, limit, orderBy, query, setDoc } from 'firebase/firestore';
+// import { ref as dbRef, set } from 'firebase/database';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
+const userId= ref('');
+
+const  getNextUserId=async(db)=>{
+  const usersCollection = collection(db, 'users');
+  const q = query(usersCollection, orderBy('id', 'desc'), limit(1));
+  const querySnapshot = await getDocs(q);
+
+  let newId = 1; // Start IDs from 1 if the collection is empty
+  if (!querySnapshot.empty) {
+    const lastUserDoc = querySnapshot.docs[0];
+    const lastUserId = lastUserDoc.data().id;
+    newId = lastUserId + 1;
+  }
+
+  return newId;
+}
 
   const signup = async (userData) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
       const user = userCredential.user;
       console.log(user);
+      await sendEmailVerification(user);
 
       // Store user data in Realtime Database
-      await set(dbRef(db, 'users/' + user.uid),userData);
+     // await set(dbRef(db, 'users/' + user.uid),userData);
+  
+// const usersRef = collection(db, 'users');
+await setDoc(doc(db, 'users', user.uid),{
+  name: userData.username,
+  email: userData.email,
+  phoneNumber: userData.mobileNumber,
+  country: userData.country
+})
 
-      // user.value = user;
-    console.log(user.value);
+
 
       return true;
     } catch (error) {
       console.error("Signup error:", error.message);
       throw error.message;
-    }
-   
+    } 
   };
 
   const login = async (userdetails) => {
@@ -57,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const sendSignInLink = async (email) => {
     const actionCodeSettings = {
-      url: 'http://localhost:5173/finishSignIn?email=' + email,
+      url: 'http://localhost:5173/finishSignIn/',
       handleCodeInApp: true,
     };
     try {

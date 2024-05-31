@@ -48,7 +48,7 @@ const todoForm=ref(null);
 const auth= useAuthStore();
 console.log(auth?.user?.email);
 console.log(auth?.user?.value);
-
+console.log(auth.user);
       const submitForm = async () => {
       store.commit('incrementTodoId');
 console.log( store.getters.getTodoId);
@@ -58,7 +58,7 @@ console.log( store.getters.getTodoId);
           date: date.value,
           status: status.value,
           note: note.value,
-           user: auth?.user?.email
+           user: auth?.user?.uid
         };
         console.log(formData);
         console.log(formData);

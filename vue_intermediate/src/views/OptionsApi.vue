@@ -37,7 +37,8 @@ import { mixinA } from '@/mixins/mixinA';
     data(){
       return{
         color: 'lightgreen',
-        text: 'Initial text in the parent component.'
+        text: 'Initial text in the parent component.',
+        sharedProperty: "local Data "
       }
     },
     methods: {

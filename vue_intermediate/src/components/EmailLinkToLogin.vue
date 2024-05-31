@@ -14,9 +14,9 @@
   <script setup>
   import { ref } from 'vue';
   // import { useAuthStore } from '../stores/auth';
-  
+  import { useAuthStore } from '@/piniastore/auth';
   const email = ref('');
-  // const authStore = useAuthStore();
+  const authStore = useAuthStore();
   
   const sendLink = async () => {
     try {

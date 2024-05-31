@@ -10,6 +10,8 @@ import TodoListView from '../views/TodoListView.vue'
 // import TodoDetailsView from '../views/TodoDetailsView.vue';
 import TodoDetailsView from '@/views/TodoDetailsView.vue';
 import EditTodoView from '@/views/EditTodoView.vue';
+import FinishSignInView from '@/views/FinishSignInView.vue';
+import { useAuthStore } from '@/piniastore/auth';
 // import { defineAsyncComponent } from 'vue';
 // const TodoListView = defineAsyncComponent(() =>
 //   import('../views/TodoListView.vue')
@@ -39,7 +41,7 @@ const router = createRouter({
       path: '/todoForm',
       name: 'todoform',
       component: TodoFormView,
-      // meta: { requiresAuth: true}
+      meta: { requiresAuth: true}
     },
     {
       path: '/todo/:id',
@@ -58,11 +60,16 @@ const router = createRouter({
       name: 'emailLinkLogin',
       component: () => import('../views/EmailLinkAuth.vue'),
       props: true
-    },
+    }, 
+     { path: '/finishSignIn', component: FinishSignInView ,
+ 
+     },
     {
       path: '/todoList/',
       name: 'todolist',
       component: TodoListView,
+      meta: { requiresAuth: true},
+
       children:[
         {
           path: 'todoDetails/:id',
@@ -106,15 +113,17 @@ const router = createRouter({
   ]
 
 })
+// !store.getters.isLoggedIn
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
-//     // If route requires authentication and user is not logged in, redirect to login page
-//     next('/login');
-//   } else {
-//     // Proceed to the next route
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const AuthStore= useAuthStore();
+  if (to.meta.requiresAuth && !AuthStore?.user?.emailVerified) {
+    // If route requires authentication and user is not logged in, redirect to login page
+    next('/login');
+  } else {
+    // Proceed to the next route
+    next();
+  }
+});
 
 export default router

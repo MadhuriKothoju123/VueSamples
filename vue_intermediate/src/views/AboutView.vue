@@ -4,6 +4,13 @@ import BuiltInComponents from '@/components/BuiltInComponents.vue';
 import keepAliveCompo1 from '@/components/keepAliveCompo1.vue';
 import keepAliveCompo2 from '@/components/keepAliveCompo2.vue';
 import { shallowRef, ref, watchEffect } from 'vue';
+import { useShared } from '@/composiable/composiablecompo';
+import { useShared2 } from '@/composiable/composiablecompo2';
+const { sharedData, sharedMethod } = useShared();
+// const { sharedData, sharedMethod } = useShared2();
+
+
+
 const current = shallowRef(keepAliveCompo1)
 
 const items = ref([
@@ -58,6 +65,9 @@ const items = ref([
       </li>
     </ul>
     <button @click="addItem">Add Item</button>
+  </div>
+  <div>
+    {{ sharedData }}
   </div>
   </div>
 
