@@ -12,17 +12,30 @@
     </div>
 
     <button @click="deleteFile">Delete</button>
+
+
+
+
+    <div>
+    <button @click="listFiles">List Files</button>
+    <ul v-if="fileList.length">
+      <li v-for="file in fileList" :key="file.name">{{ file.name }}</li>
+    </ul>
+  </div>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
-import { getStorage, ref as storageRef, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
-
+import { getStorage, ref as storageRef, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage'
+import { useAuthStore } from '@/piniastore/auth';
+import { storage } from '@/firebase';
+const auth= useAuthStore()
 const File = ref(null)
 const preview = ref(null)
 const isPic = ref(false)
 const progress= ref(null);
-const fileRef= ref(null)
+const fileRef= ref(null);
+const fileList = ref([]);
 const getFile = (event) => {
   console.log(event.target)
   File.value = event.target.files[0]
@@ -37,13 +50,16 @@ const submitFile = async () => {
   if (!File.value) return
 
   const storage = getStorage()
-  fileRef.value = storageRef(storage, File.value.name)
+  const filePath = `uploads/${auth.user.uid}/${File.value.name}`;
+  fileRef.value = storageRef(storage, filePath)
 
 
     // Upload file to Firebase Storage
     const metadata = {
   contentType: 'image/jpeg',
 };
+
+
   const uploadTask=  uploadBytesResumable(fileRef.value, File.value, metadata);
 
   uploadTask.on('state_changed',
@@ -101,6 +117,20 @@ const deleteFile = async () => {
     console.log('File deleted successfully');
   } catch (error) {
     console.error('Error deleting file:', error);
+  }
+}
+
+const listFiles = async () => {
+  try {
+   
+    const listRef = storageRef(storage, `uploads/${auth.user.uid}/`);
+    const res = await listAll(listRef);
+
+    fileList.value = res.items.map(itemRef => {
+      return { name: itemRef.name, fullPath: itemRef.fullPath };
+    });
+  } catch (error) {
+    console.error('Error listing files:', error);
   }
 }
 </script>

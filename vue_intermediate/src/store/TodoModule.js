@@ -1,4 +1,4 @@
-import { auth, db } from '@/firebase'
+import {  db } from '@/firebase'
 import { useAuthStore } from '@/piniastore/auth'
 import { and, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 
