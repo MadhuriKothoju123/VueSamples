@@ -1,6 +1,6 @@
 <script setup>
 import store from '@/store';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch, reactive} from 'vue';
 import { RouterLink, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { VContainer } from 'vuetify/lib/components/index.mjs';
 import { useAuthStore } from '@/piniastore/auth';
@@ -13,8 +13,8 @@ const authStore= useAuthStore()
 
 
 console.log(authStore.user);
-const user= computed(()=>authStore?.user?.email)
-const todos= computed(()=> store.getters.getUserTodos(user.value));
+// const user= computed(()=>authStore?.user?.uid)
+const todos= computed(()=> store.getters?.getUserTodos);
 onBeforeRouteUpdate((to,from,next)=>{
   if(to.params.id) {
     if(to.name==="editTodo"){
@@ -44,11 +44,48 @@ onBeforeRouteUpdate((to,from,next)=>{
 
 })
 
+watch(todos, (newTodos, oldTodos) => {
+       console.log('Todos changed:', { newTodos, oldTodos });
+    const todoData=  store.getters?.getUserTodos;
+   const data= todoData.map(item => ({
+      id: item.id,
+      todoItem: item.todoItem,
+      status: item.status,
+      date: item.date,
+      userId: item.userId,
+      note: item.note
 
-onMounted(()=>{
-    store.dispatch('fetchTodos')
-})
+      // Example transformation
+      // ... other transformations
+    }));
+    console.log(data)
+    todos.value= data;
+    console.log(todos.value,'list')
+    },  { immediate: true });
 
+// let unsubscribe;
+onMounted(() => {
+  // unsubscribe = store.dispatch('subscribeToTodos');
+  // store.dispatch('fetchTodos');
+  store.dispatch('fetchTodos');
+
+});
+
+// onUnmounted(() => {
+//   if (unsubscribe) {
+//     unsubscribe();
+//   }
+// });
+// onMounted(() => {
+//   const todosRef = collection(db, 'todos');
+//   const q = query(todosRef, where('uid', '==', props.user.uid));
+//   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+//     todos.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//   });
+  
+  
+//   return () => unsubscribe();
+// });
 
 const OpenModalContent=(id)=>{
 router.push({name: 'editTodo', params: {id: id }})
@@ -79,8 +116,9 @@ if(isDeleted) alert('Todo Deleted Successfully');
   <VContainer  style="display: flex; margin-top: 60px; justify-content: center;">
 
   <v-card elevation="10"  width="1000px" style="padding: 20px;"> 
-    <div style="display: flex; justify-content: flex-end;">
+    <div style="display: flex;  justify-content: flex-end;">
       <RouterLink to="/todoform"><VBtn color="green">Add Todo </VBtn></RouterLink>
+      <RouterLink to="/completedTodos"><VBtn color="green">Completed Todos</VBtn></RouterLink>
   </div>
     <v-table style="margin: 20px;"  hover=true height="500px"
       fixed-header
@@ -120,8 +158,9 @@ if(isDeleted) alert('Todo Deleted Successfully');
         
         <tr 
           v-for="(todo, index) in todos"
-          :key="index" v-memo="[todo.id]"
+          :key="index" 
         >
+   
           <td>{{ todo.id }}</td>
           <td>{{ todo.todoItem }}</td>
           <td>{{ todo.date }}</td>

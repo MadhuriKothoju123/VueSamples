@@ -8,47 +8,30 @@ import { addDoc, collection, doc, getDocs, limit, orderBy, query, setDoc } from 
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
-const userId= ref('');
-
-const  getNextUserId=async(db)=>{
-  const usersCollection = collection(db, 'users');
-  const q = query(usersCollection, orderBy('id', 'desc'), limit(1));
-  const querySnapshot = await getDocs(q);
-
-  let newId = 1; // Start IDs from 1 if the collection is empty
-  if (!querySnapshot.empty) {
-    const lastUserDoc = querySnapshot.docs[0];
-    const lastUserId = lastUserDoc.data().id;
-    newId = lastUserId + 1;
-  }
-
-  return newId;
-}
 
   const signup = async (userData) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
       const user = userCredential.user;
       console.log(user);
+      console.log(auth.currentUser.uid);
       await sendEmailVerification(user);
 
       // Store user data in Realtime Database
      // await set(dbRef(db, 'users/' + user.uid),userData);
   
 // const usersRef = collection(db, 'users');
-await setDoc(doc(db, 'users', user.uid),{
+await setDoc(doc(db, 'usersDetails', user.uid),{
   name: userData.username,
   email: userData.email,
   phoneNumber: userData.mobileNumber,
-  country: userData.country
+  country: userData.country,
+  userId: user.uid
 })
-
-
-
       return true;
     } catch (error) {
-      console.error("Signup error:", error.message);
-      throw error.message;
+      console.error("Signup error:", error);
+      throw error;
     } 
   };
 

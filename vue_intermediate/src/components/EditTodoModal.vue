@@ -41,6 +41,7 @@ import store from '@/store';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';  
 import SlotsComponent from './SlotsComponent.vue';
+import { useAuthStore } from '@/piniastore/auth';
 
 const route = useRoute()
 const router= useRouter()
@@ -48,6 +49,7 @@ const id=computed(()=> route.params.id)
 
 
 const openModal=ref(true);
+
 const todoItem = ref('');
       const date = ref(new Date());;
       const status = ref('');
@@ -84,12 +86,13 @@ const updateTodo= async()=>{
           date: formattedDate.value,
           status: status.value,
           note: note.value,
-          user: store.getters.getCurrentUser
+          userId: useAuthStore().user.uid
         };
        const isSuccess= await store.dispatch('updateTodo', updatedTodoData);
        if(isSuccess){
+        router.go(-1);
         alert('Todo Updated Successfully');
-        router.go(-1)
+      
        }
 }
 const statusOptions= ref( ['Pending', 'In progress', 'Completed']);

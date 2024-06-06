@@ -4,7 +4,7 @@ import RegistrationView from '../views/RegistrationView.vue'
 import LoginView from '../views/LoginView.vue';
 import TodoFormView from '../views/TodoFormView.vue';
 import TodoListView from '../views/TodoListView.vue'
-
+import CompletedTodos from '@/components/CompletedTodos.vue'
 
 // import store from '@/store'
 // import TodoDetailsView from '../views/TodoDetailsView.vue';
@@ -12,6 +12,7 @@ import TodoDetailsView from '@/views/TodoDetailsView.vue';
 import EditTodoView from '@/views/EditTodoView.vue';
 import FinishSignInView from '@/views/FinishSignInView.vue';
 import { useAuthStore } from '@/piniastore/auth';
+import FileUploadView from '@/views/FileUploadView.vue';
 // import { defineAsyncComponent } from 'vue';
 // const TodoListView = defineAsyncComponent(() =>
 //   import('../views/TodoListView.vue')
@@ -36,6 +37,13 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+
+    {
+      path: '/fileUpload',
+      name: 'fileUpload',
+      component: FileUploadView,
+     
     },
     {
       path: '/todoForm',
@@ -64,6 +72,12 @@ const router = createRouter({
      { path: '/finishSignIn', component: FinishSignInView ,
  
      },
+     {
+      path: '/completedTodos',
+      name: 'completedTodos',
+      component:CompletedTodos,
+
+    },
     {
       path: '/todoList/',
       name: 'todolist',
