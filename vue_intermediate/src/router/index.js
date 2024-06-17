@@ -98,15 +98,9 @@ const router = createRouter({
           props: true
         },
 
-        // {
-        //   path: 'deleteTodo/:id',
-        //   name: 'deleteTodo',
-        //   component:DeleteTodoView,
-        //   props: true
-        // }
+       
       ]
-      // component: () => import('../views/TodoListView.vue'),
-      // meta: { requiresAuth: true}
+    
     },
     {
       path: '/about',
@@ -118,12 +112,7 @@ const router = createRouter({
       path: '/optionapi',
       name: 'optionapi',
       component: () => import('../views/OptionsApi.vue')
-    },
-    // {
-    //   path: '/user/:id',
-    //   component: UserDetails,
-    //   props: true // Pass route params as props to the component
-    // }
+    }
   ]
 
 })
@@ -131,7 +120,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const AuthStore= useAuthStore();
-  if (to.meta.requiresAuth && !AuthStore?.user?.emailVerified) {
+  if (to.meta.requiresAuth && !AuthStore?.user) {
     // If route requires authentication and user is not logged in, redirect to login page
     next('/login');
   } else {

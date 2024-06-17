@@ -1,196 +1,119 @@
 <script setup>
-import store from '@/store';
-import { computed, onMounted, watch, reactive} from 'vue';
-import { RouterLink, onBeforeRouteUpdate, useRouter } from 'vue-router';
-import { VContainer } from 'vuetify/lib/components/index.mjs';
-import { useAuthStore } from '@/piniastore/auth';
+import store from '@/store'
+import { computed, onMounted, watch } from 'vue'
+import { RouterLink, onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { VContainer } from 'vuetify/lib/components/index.mjs'
+import { useAuthStore } from '@/piniastore/auth'
 
+const router = useRouter()
+const authStore = useAuthStore()
 
-
-const router= useRouter();
-const authStore= useAuthStore()
-
-
-
-console.log(authStore.user);
-// const user= computed(()=>authStore?.user?.uid)
-const todos= computed(()=> store.getters?.getUserTodos);
-onBeforeRouteUpdate((to,from,next)=>{
-  if(to.params.id) {
-    if(to.name==="editTodo"){
+console.log(authStore.user)
+const todos = computed(() => store.getters?.getUserTodos)
+onBeforeRouteUpdate((to, from, next) => {
+  if (to.params.id) {
+    if (to.name === 'editTodo') {
       if (confirm('Do you really want to make changes to Todo?')) {
-    next();
-  } else {
-    next(false);
-  }
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
     }
-  //   else if(to.name==='deleteTodo'){
-  //     if (confirm('Do you really want to make changes to Todo?')) {
-  //   next();
-  // }
-  //  else {
-  //   next(false);
-  // }
-  //   }
-  else{
-    next();
+  } else {
+    next()
   }
-
-  }
-  else{
-  next();
-  }
- 
-
 })
 
-watch(todos, (newTodos, oldTodos) => {
-       console.log('Todos changed:', { newTodos, oldTodos });
-    const todoData=  store.getters?.getUserTodos;
-   const data= todoData.map(item => ({
+watch(
+  todos,
+  (newTodos, oldTodos) => {
+    console.log('Todos changed:', { newTodos, oldTodos })
+    const todoData = store.getters?.getUserTodos
+    const data = todoData.map((item) => ({
       id: item.id,
       todoItem: item.todoItem,
       status: item.status,
       date: item.date,
       userId: item.userId,
       note: item.note
-
-      // Example transformation
-      // ... other transformations
-    }));
+    }))
     console.log(data)
-    todos.value= data;
-    console.log(todos.value,'list')
-    },  { immediate: true });
+    todos.value = data
+    console.log(todos.value, 'list')
+  },
+  { immediate: true }
+)
 
-// let unsubscribe;
 onMounted(() => {
-  // unsubscribe = store.dispatch('subscribeToTodos');
-  // store.dispatch('fetchTodos');
-  store.dispatch('fetchTodos');
+  store.dispatch('fetchTodos')
+})
 
-});
-
-// onUnmounted(() => {
-//   if (unsubscribe) {
-//     unsubscribe();
-//   }
-// });
-// onMounted(() => {
-//   const todosRef = collection(db, 'todos');
-//   const q = query(todosRef, where('uid', '==', props.user.uid));
-//   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-//     todos.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-//   });
-  
-  
-//   return () => unsubscribe();
-// });
-
-const OpenModalContent=(id)=>{
-router.push({name: 'editTodo', params: {id: id }})
+const OpenModalContent = (id) => {
+  router.push({ name: 'editTodo', params: { id: id } })
 }
 
+const deleteTodo = async (todo) => {
+  const isDeleted = await store.dispatch('deleteTodo', todo)
 
-
-const deleteTodo=async(todo)=>{
-   
-const isDeleted= await store.dispatch('deleteTodo', todo);
-
-
-if(isDeleted) alert('Todo Deleted Successfully');
-
+  if (isDeleted) alert('Todo Deleted Successfully')
 }
 
-
-
- const navigateToTodoDetails=(id)=>{
-
+const navigateToTodoDetails = (id) => {
   //  router.push({ path: `todoList/todo/${{ id }}` })
-  router.push({name:'todoDetails',params:{id:id}})
- }
+  router.push({ name: 'todoDetails', params: { id: id } })
+}
 </script>
 
 <template>
+  <VContainer style="display: flex; margin-top: 60px; justify-content: center">
+    <v-card elevation="10" width="1000px" style="padding: 20px">
+      <div style="display: flex; justify-content: flex-end">
+        <RouterLink to="/todoform"><VBtn color="green">Add Todo </VBtn></RouterLink>
+        <RouterLink to="/completedTodos"><VBtn color="green">Completed Todos</VBtn></RouterLink>
+      </div>
+      <v-table style="margin: 20px" hover="true" height="500px" fixed-header>
+        <thead>
+          <tr>
+            <th class="text-left">S.No</th>
+            <th class="text-left">Todo Item</th>
+            <th class="text-left">Date</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Note</th>
+            <th class="text-left">Edit</th>
+            <th class="text-left">Delete</th>
+            <th class="text-left">View</th>
+          </tr>
+        </thead>
 
-  <VContainer  style="display: flex; margin-top: 60px; justify-content: center;">
-
-  <v-card elevation="10"  width="1000px" style="padding: 20px;"> 
-    <div style="display: flex;  justify-content: flex-end;">
-      <RouterLink to="/todoform"><VBtn color="green">Add Todo </VBtn></RouterLink>
-      <RouterLink to="/completedTodos"><VBtn color="green">Completed Todos</VBtn></RouterLink>
-  </div>
-    <v-table style="margin: 20px;"  hover=true height="500px"
-      fixed-header
-    >
-      <thead>
-        <tr >
-          <th  class="text-left">
-            S.No
-          </th>
-          <th class="text-left">
-            Todo Item
-          </th>
-          <th class="text-left">
-             Date
-          </th>
-          <th class="text-left">
-             Status
-          </th>
-          <th class="text-left">
-            Note
-          </th>
-          <th class="text-left">
-            Edit
-          </th>
-          <th class="text-left">
-          Delete
-          </th>
-          <th class="text-left">
-        View
-          </th>
-        </tr>
-      </thead>
-  
-      <tbody>
-        
-        <TransitionGroup name="fade" >
-        
-        <tr 
-          v-for="(todo, index) in todos"
-          :key="index" 
-        >
-   
-          <td>{{ todo.id }}</td>
-          <td>{{ todo.todoItem }}</td>
-          <td>{{ todo.date }}</td>
-          <td>{{ todo.status }}</td>
-          <td>{{ todo.note }}</td>
-          <td><VBtn @click="OpenModalContent(todo.id)" color="orange" >Edit</VBtn></td>
-          <td><VBtn color="red"  @click="deleteTodo(todo)">Delete</VBtn></td>
-          <td><VBtn color="blue" @click="navigateToTodoDetails(todo.id)"  >View</VBtn></td>
-          <td v-if="console.log('Rendering todo:', todo.id)"></td>
-          <!-- <td><RouterLink to="{
+        <tbody>
+          <TransitionGroup name="fade">
+            <tr v-for="(todo, index) in todos" :key="index">
+              <td>{{ todo.id }}</td>
+              <td>{{ todo.todoItem }}</td>
+              <td>{{ todo.date }}</td>
+              <td>{{ todo.status }}</td>
+              <td>{{ todo.note }}</td>
+              <td><VBtn @click="OpenModalContent(todo.id)" color="orange">Edit</VBtn></td>
+              <td><VBtn color="red" @click="deleteTodo(todo)">Delete</VBtn></td>
+              <td><VBtn color="blue" @click="navigateToTodoDetails(todo.id)">View</VBtn></td>
+              <td v-if="console.log('Rendering todo:', todo.id)"></td>
+              <!-- <td><RouterLink to="{
                                         name: 'todoDetails',
                                         params: { id: post.id },
                                         query: { sort: 'asc' },
                                     }"><VBtn color="blue"   >View</VBtn></RouterLink></td> -->
+            </tr>
+          </TransitionGroup>
+        </tbody>
+      </v-table>
+    </v-card>
+  </VContainer>
 
-        </tr>
-
-      </TransitionGroup>
-      </tbody>
-
-    </v-table>
- 
-  </v-card>
-
-</VContainer>
-
-<RouterView/>
-  </template>
-  <style>
-
+  <RouterView />
+</template>
+<style>
 .fade-move,
 .fade-enter-active,
 .fade-leave-active {

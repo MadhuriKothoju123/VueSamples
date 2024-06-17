@@ -66,7 +66,6 @@ import { emailValidation, passwordValidation } from '@/validation/registrationFo
 import { useAuthStore } from '@/piniastore/auth'
 import { getGoogleRedirectResult, signInWithGoogle } from '@/firebase'
 import { onMounted } from 'vue'
-// const store= useStore();
 const user = reactive({
   email: '',
   password: ''
@@ -93,7 +92,6 @@ onMounted(async () => {
     router.push('/todoform');
   
     
-    // Redirect to dashboard after successful login
   }
   else{
     router.push('/login')
@@ -104,15 +102,13 @@ const login = async () => {
   try {
     console.log(email)
     const res = await authStore.login(user)
-    //  if(res.status===200) {
-    //   await store.dispatch('loginUser', email.value);
-    //   alert('Successfully User Logined');
-    //   router.push('/todoForm');
-    //  }
+
 
     if (res) {
       router.push('/todoForm')
-      if (authStore?.user?.emailVerified) alert('Successfully User Logined')
+      if (authStore?.user) {
+        alert("Successful Login");
+      }
       else {
         alert('user Email is not verified')
       }

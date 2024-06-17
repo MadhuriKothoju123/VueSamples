@@ -3,8 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { auth, db } from '@/firebase';
 import { createUserWithEmailAndPassword, isSignInWithEmailLink, sendEmailVerification, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithEmailLink, signOut } from 'firebase/auth';
-import { addDoc, collection, doc, getDocs, limit, orderBy, query, setDoc } from 'firebase/firestore';
-// import { ref as dbRef, set } from 'firebase/database';
+import {   doc,setDoc } from 'firebase/firestore';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
@@ -16,17 +15,13 @@ export const useAuthStore = defineStore('auth', () => {
       console.log(user);
       console.log(auth.currentUser.uid);
       await sendEmailVerification(user);
-
-      // Store user data in Realtime Database
-     // await set(dbRef(db, 'users/' + user.uid),userData);
-  
-// const usersRef = collection(db, 'users');
 await setDoc(doc(db, 'usersDetails', user.uid),{
   name: userData.username,
   email: userData.email,
   phoneNumber: userData.mobileNumber,
   country: userData.country,
-  userId: user.uid
+  userId: user.uid,
+  fcmToken: '',
 })
       return true;
     } catch (error) {

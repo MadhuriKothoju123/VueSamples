@@ -125,7 +125,6 @@
 </template>
 <script setup>
 import router from '@/router';
-// import store from '@/store';
 import { useAuthStore } from '@/piniastore/auth';
 import useVuelidate from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
@@ -157,10 +156,8 @@ const rules = computed(()=>({
 const v$ = useVuelidate(rules, userData)
 const authStore= useAuthStore();
 
-// const formData = ref(null);
 
 const submitForm =async()=>{  
-// store.commit('incrementUserId');
           try {   
        const res= await authStore.signup(userData);
   
@@ -169,10 +166,7 @@ const submitForm =async()=>{
       router.push('/login')
 
     }
-        //  if(res?.status===201){
-        //   alert("Succesfully registered");
-       
-        //  }
+    
         } catch (error) {
     alert(error.message);
   }

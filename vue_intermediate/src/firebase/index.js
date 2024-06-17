@@ -1,9 +1,8 @@
-// Import the functions you need from the SDKs you need
-import router from "@/router";
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithPopup, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage';
+
 // import { getDatabase } from "firebase/database";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -24,10 +23,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-// const db = getDatabase(app);
-const db = getFirestore(app);
 const storage = getStorage(app);
+ 
 const provider = new GoogleAuthProvider();
+
+const db = getFirestore(app);
+
 
 
 
@@ -51,13 +52,6 @@ const getGoogleRedirectResult = async () => {
   }
 };
 
+
+
 export { auth, db, storage, signInWithGoogle, getGoogleRedirectResult }
-// const analytics = getAnalytics(app);
-
-
-// import { getApp } from "firebase/app";
-// import { getStorage } from "firebase/storage";
-
-// // Get a non-default Storage bucket
-// const firebaseApp = getApp();
-// const storage = getStorage(firebaseApp, "gs://my-custom-bucket");

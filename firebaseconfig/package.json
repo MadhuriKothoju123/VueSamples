@@ -17,6 +17,7 @@
     "bootstrap": "^5.3.3",
     "firebase": "^10.12.2",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
     "vue-resource": "^1.5.3",

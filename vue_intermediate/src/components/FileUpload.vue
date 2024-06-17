@@ -26,7 +26,8 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { getStorage, ref as storageRef, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage'
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject, listAll } from 'firebase/storage'
+// uploadBytes
 import { useAuthStore } from '@/piniastore/auth';
 import { storage } from '@/firebase';
 const auth= useAuthStore()
@@ -65,8 +66,10 @@ const submitFile = async () => {
   uploadTask.on('state_changed',
     (snapshot) => {
       progress.value = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+   console.log(snapshot.state);
       switch (snapshot.state) {
+      
+
       case 'paused':
         console.log('Upload is paused');
         break;

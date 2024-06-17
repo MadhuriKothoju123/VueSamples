@@ -103,7 +103,7 @@ const items = ref([
           <v-list>
             <v-list-item
            
-             :title="'welcome'"
+             :title="'welcome user'"
            :subtitle="email"
             >
               <template v-slot:append>

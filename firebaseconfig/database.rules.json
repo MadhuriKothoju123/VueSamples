@@ -1,0 +1,11 @@
+{
+    "rules": {
+      "comments": {
+        "$commentId": {
+          ".read": "auth != null && auth.uid == data.child('userId').val()",
+          ".write": "auth != null && auth.uid == newData.child('userId').val()"
+        }
+      }
+    }
+  }
+  
