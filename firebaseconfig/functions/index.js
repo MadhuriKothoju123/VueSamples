@@ -26,8 +26,9 @@
 
 const {onCall, onRequest, HttpsError} = require("firebase-functions/v2/https");
 const {initializeApp} = require("firebase-admin/app");
-
-// const {logger} = require("firebase-functions/v2");
+const {getFirestore} = require("firebase-admin/firestore");
+const {schedule} = require("firebase-functions/v1/pubsub");
+const {logger} = require("firebase-functions/v2");
 
 // Dependencies for the addMessage function.
 const {getDatabase} = require("firebase-admin/database");
@@ -35,8 +36,10 @@ const {beforeUserCreated, beforeUserSignedIn} = require("firebase-functions/v2/i
 const {onValueWritten} = require("firebase-functions/v2/database");
 
 const admin = initializeApp({
-  databaseURL: "http://localhost:9000/?ns=dataaccess-7c490-default-rtdb", // (or your actual URL)
+  databaseURL: "http://localhost:9014/?ns=dataaccess-7c490-default-rtdb", // (or your actual URL)
 });
+
+
 
 const db = getDatabase(admin);
 // Saves a message to the Firebase Realtime Database but sanitizes the
@@ -111,5 +114,12 @@ exports. beforesignedin = beforeUserSignedIn((event) => {
 exports.onWrittenFunctionDefault = onValueWritten("/posts/{postId}", (event) => {
   // console.log(`for post ${event.data.after.data.postId} the content is ${event.data.after.data.content}` );
   console.log("post created");
+});
+
+
+
+// eslint-disable-next-line max-len
+exports.sendWelcomeMessage = schedule("every 5 minutes").onRun(async (context) => {
+  console.log(' Welcome to Todo APP');
 });
 

@@ -41,7 +41,7 @@
       "port": 5001
     },
     "firestore": {
-      "port": 8088
+      "port": 8080
     },
     "ui": {
       "enabled": true
@@ -49,9 +49,6 @@
     "singleProjectMode": true,
     "hosting": {
       "port": 5000
-    },
-    "pubsub": {
-      "port": 8085
     }
   }
 }

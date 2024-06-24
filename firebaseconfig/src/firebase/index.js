@@ -28,25 +28,10 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 const functions = getFunctions(app);
-const messaging = getMessaging(app);
-
-export const requestPermission = async () => {
-  try {
-    const token = await getToken(messaging, { vapidKey: "BHdVQUciqD79vUlGg-K2cop6AkgfTL7TraOmQtjJZkAk6kAoj8SlMMOlpY_lAy6ISTSsqer2yVwjKM-K2F4PCiA" });
-    if (token) {
-      console.log('FCM Token:', token);
-      // Save the token to your server or database if needed
-    } else {
-      console.log('No registration token available. Request permission to generate one.');
-    }
-  } catch (error) {
-    console.error('An error occurred while retrieving token. ', error);
-  }
-};
 
 
 if (window.location.hostname === "localhost") {
-  connectDatabaseEmulator(database, 'localhost', 9005);
+  connectDatabaseEmulator(database, 'localhost', 9014);
   connectFunctionsEmulator(functions, "localhost", 5001);
   connectAuthEmulator(auth, "http://localhost:9099");
 

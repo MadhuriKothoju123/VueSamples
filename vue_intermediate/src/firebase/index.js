@@ -36,12 +36,12 @@ const messaging = getMessaging(app);
 const functions = getFunctions(app);
 
 
-// if (window.location.hostname === 'localhost') {
-//   // connectAuthEmulator(auth, "http://localhost:9099");
-//   connectFirestoreEmulator(db, 'localhost', 8088);
-//   connectFunctionsEmulator(functions, "localhost", 5001);
-//   // connectMessagingEmulator('localhost', 8085); 
-// }
+if (window.location.hostname === 'localhost') {
+  // connectAuthEmulator(auth, "http://localhost:9099");
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectFunctionsEmulator(functions, "localhost", 5001);
+  // connectMessagingEmulator('localhost', 8085); 
+}
 const signInWithGoogle = async () => {
   try {
     await signInWithRedirect(auth, provider);

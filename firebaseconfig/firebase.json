@@ -23,7 +23,7 @@
       "port": 5001
     },
     "database": {
-      "port": 9005,
+      "port": 9014,
       "rules": "database.rules.json"
     },
     "ui": {
