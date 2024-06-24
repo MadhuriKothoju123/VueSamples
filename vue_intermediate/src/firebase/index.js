@@ -1,7 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { GoogleAuthProvider, connectAuthEmulator, getAuth, getRedirectResult, signInWithRedirect } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage';
+import { getMessaging } from 'firebase/messaging';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+
 
 // import { getDatabase } from "firebase/database";
 // import { getAnalytics } from "firebase/analytics";
@@ -29,9 +32,16 @@ const provider = new GoogleAuthProvider();
 
 const db = getFirestore(app);
 
+const messaging = getMessaging(app);
+const functions = getFunctions(app);
 
 
-
+// if (window.location.hostname === 'localhost') {
+//   // connectAuthEmulator(auth, "http://localhost:9099");
+//   connectFirestoreEmulator(db, 'localhost', 8088);
+//   connectFunctionsEmulator(functions, "localhost", 5001);
+//   // connectMessagingEmulator('localhost', 8085); 
+// }
 const signInWithGoogle = async () => {
   try {
     await signInWithRedirect(auth, provider);
@@ -54,4 +64,4 @@ const getGoogleRedirectResult = async () => {
 
 
 
-export { auth, db, storage, signInWithGoogle, getGoogleRedirectResult }
+export { auth, db, storage, signInWithGoogle, getGoogleRedirectResult, messaging }

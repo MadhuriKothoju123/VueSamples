@@ -1,6 +1,6 @@
 import {  db } from '@/firebase'
 import { useAuthStore } from '@/piniastore/auth'
-import { Timestamp, and, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import { and, collection, deleteDoc, doc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 
 // modules/user.js
 const state = {
@@ -62,7 +62,7 @@ const actions = {
   async createTodo({ commit }, todo) {
 
     const newUserDocRef = doc(db, 'todos',todo.id);
-  const res=  await setDoc(newUserDocRef, { ...todo, id: todo.id,  created_at: Timestamp.now(), }) .then(() => {
+  const res=  await setDoc(newUserDocRef, { ...todo, id: todo.id,    createdAt: new Date().toISOString(), }) .then(() => {
       commit('addTodo', todo);
       localStorage.setItem('todoDocId', 1);  
       return true

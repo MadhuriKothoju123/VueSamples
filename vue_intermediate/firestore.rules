@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+ 
+           
+             function reviewFieldsAreValidTypes(docData) {
+             //( hasAll(request must contains all the mentioned fields), hasOnly(the request should only contain these fields only)
+        return docData.keys().hasAll(['todoItem', 'note', 'date','status']) && docData.todoItem is string &&
+               docData.date is string &&
+                docData.note is string &&
+                docData.status is string;
+        
+  }
+  
+    // ".validate": "newData.hasChildren(['todoItem', 'priority', 'status', 'rating']) &&
+    //                     newData.child('todoItem').isString() &&
+    //                     newData.child('priority').isNumber() && newData.child('priority').val() == Math.round(newData.child('priority').val()) &&
+    //                     (newData.child('status').val() == 'pending' || newData.child('status').val() == 'completed') &&
+    //                     newData.child('rating').isNumber() && newData.child('rating').val() % 1 != 0"
+  function requestAuth(request){
+       let auth =request.auth;
+             let uid = request.auth.uid;
+             let userId= request.resource.data.userId;
+             return auth!=null && uid==userId;
+             
+  }
+  function updateRequest(request, resource){
+return (request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['date', 'status', 'note']));
+  
+  }
+           
+match /todos/{id} {
+  allow create:if requestAuth(request) && reviewFieldsAreValidTypes(request.resource.data );
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow update:if requestAuth(request) && updateRequest(request, resource);
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    
+    }
+ 
+  match /usersDetails/{userId}{
+    allow read: if request.auth.uid ==userId;
+    allow write: if request.auth.uid == userId;
+  
+}
+
+  }
+
+  
+}
