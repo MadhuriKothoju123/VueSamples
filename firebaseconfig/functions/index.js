@@ -36,7 +36,7 @@ const {beforeUserCreated, beforeUserSignedIn} = require("firebase-functions/v2/i
 const {onValueWritten} = require("firebase-functions/v2/database");
 
 const admin = initializeApp({
-  databaseURL: "http://localhost:9014/?ns=dataaccess-7c490-default-rtdb", // (or your actual URL)
+  databaseURL: "http://localhost:8080/?ns=dataaccess-7c490-default-rtdb", // (or your actual URL)
 });
 
 

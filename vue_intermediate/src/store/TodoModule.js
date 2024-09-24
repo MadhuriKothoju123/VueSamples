@@ -118,7 +118,6 @@ const actions = {
       userId:updatedTodo.userId
 
     };
-    todoDocRef
     const res = await updateDoc(todoDocRef, updatedFields)
 
       .then((data) => {

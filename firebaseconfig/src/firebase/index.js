@@ -31,7 +31,7 @@ const functions = getFunctions(app);
 
 
 if (window.location.hostname === "localhost") {
-  connectDatabaseEmulator(database, 'localhost', 9014);
+  connectDatabaseEmulator(database, 'localhost', 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
   connectAuthEmulator(auth, "http://localhost:9099");
 
